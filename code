@@ -1,0 +1,46 @@
+#include <fstream>
+#include <vector>
+#include <queue>
+
+using namespace std;
+
+long long partituri = 0, height1, height2, n, x, y;
+vector<priority_queue <long long>> par(19);
+
+int main()
+{
+    ifstream cin("partitura.in");
+    ofstream cout("partitura.out");
+    
+    cin >> n;
+    
+    for(int i = 1; i <= n; i ++)
+    {
+        cin >> x >> y;
+        
+        par[x].push(y);
+    }
+    
+    for(int i = 18; i > 0; --i)
+    {
+        while(par[i].size() > 1)
+        {
+            height1 = par[i].top();
+            par[i].pop();
+            height2 = par[i].top();
+            par[i].pop();
+            
+            par[i - 1].push(height1 + height2);
+        }
+    }
+    
+    while(par[0].empty() == false)
+    {
+        partituri += par[0].top() * par[0].top();
+        par[0].pop();
+    }
+    
+    cout << partituri;
+    
+    return 0;
+}
